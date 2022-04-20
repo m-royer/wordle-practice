@@ -1,0 +1,45 @@
+
+header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: #041826;
+  padding: 10px;
+  border-bottom: solid 1px #0e2535;
+  width: 100%;
+
+  & .menu-container {
+    
+    & img {
+      width: 1.5rem;
+      height: 1.5rem;
+      margin: 5px;
+
+      &:hover {
+        cursor: pointer;
+      }
+    }
+  }
+
+  & .title {
+    font-size: 1.8rem;
+    font-family: 'Abril Fatface', cursive;
+  }
+
+  & .statistics-settings {
+
+    & .statistics {
+      transform: rotate(90deg);
+    }
+    
+    & img {
+      width: 1.5rem;
+      height: 1.5rem;
+      margin: 5px;
+
+      &:hover {
+        cursor: pointer;
+      }
+    }
+  }
+}

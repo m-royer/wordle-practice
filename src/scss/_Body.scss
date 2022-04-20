@@ -1,0 +1,20 @@
+
+#root {
+  height: 100%;
+}
+
+body {
+    background: #010d16;
+    color: #FFF;
+    font-family: 'Lato', sans-serif;
+    overflow: hidden;
+  }
+  
+  .App {
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+    height: 100%;
+  }

@@ -1,0 +1,102 @@
+.keyboard-container {
+    position: relative;
+    z-index: 10;
+    width: 100%;
+    max-width: 600px;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    user-select: none;
+
+    & .keyboard-row {
+        width: 100%;
+        display: flex;
+        justify-content: center;
+
+        & div {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 48px;
+            height: 56px;
+            background: #757575;
+            font-size: 1rem;
+            color: #FFF;
+            margin: 3px;
+            border-radius: 3px;
+            text-transform: uppercase;
+            cursor: pointer;
+
+            &.correct {
+                background: #509b49;
+                color: #dbeed9;
+                border: solid 2px #5fb457;
+                box-shadow: 0px 0px 10px 0px rgba(44,190,88,1);
+            }
+    
+            &.missed {
+                background: #B59F3B;
+                color: #e6e0c8;
+                border: solid 2px #dbbd39;
+            }
+    
+            &.wrong {
+                background: #122a3b;
+                color: #759fbd;
+            }
+
+            &.enter {
+                padding: 0 10px;
+                background: #606060;
+            }
+
+            &.back {
+                padding: 0 10px;
+                background: #606060;
+
+                & img {
+                    width: 2rem;
+                    height: 2rem;
+                }
+            }
+        }
+    }
+
+    .game-over-overlay {
+        position: absolute;
+        z-index: 11;
+        width: 100%;
+        height: 100%;
+        background: rgba(1,13,22,0.5);
+        display: flex;
+        flex-direction: column;
+        gap: 20px;
+        justify-content: center;
+        align-items: center;
+        color: #FFF;
+        font-size: 2rem;
+        font-weight: bold;
+
+        & .btn {
+            background: #3f7a37;
+            color: #d6e3eb;
+            border-radius: 3px;
+            padding: 15px 30px;
+            cursor: pointer;
+            font-size: 1.2rem;
+            font-weight: bold;
+            display: flex;
+            gap: 5px;
+
+            &:hover {
+                background: #4f9246;
+                color: #FFF;
+            }
+
+            & img {
+                width: 1.2rem;
+                height: 1.2rem;
+            }
+        }
+    }
+}

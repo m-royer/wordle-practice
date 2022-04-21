@@ -1,0 +1,37 @@
+$body-bg: #010d16;
+
+/*  navbar  */
+$navbar-bg: #041826;
+$navbar-border-color: #0e2535;
+
+/*  Gameboard  */
+$empty-cell-border-color: #1a374c;
+$correct-background-color: #509b49;
+$correct-border-color: #5fb457;
+$correct-glow-color: rgba(44,190,88,1);
+$missed-background-color: #B59F3B;
+$missed-border-color: #dbbd39;
+$wrong-background-color: #122a3b;
+
+/*  Keyboard  */
+$correct-key-color: #dbeed9;
+$missed-key-color: #e6e0c8;
+$wrong-key-color: #759fbd;
+$important-key-color: #606060;
+$game-over-text-color: #FFF;
+
+/*  Modals  */
+$modal-bg: #111;
+$modal-text-color: #FFF;
+$modal-border-color: #191919;
+$modal-title-bg-color: radial-gradient(ellipse at center, rgba(85,85,85,1) 0%,rgba(51,51,51,1) 100%);
+$group-border-color: #444;
+$settings-toggle-unchecked-bg: rgba(196, 195, 195, 0.55);
+$settings-toggle-button-bg: rgb(255, 255, 255);
+$statistics-toggle-bar-bg: #333;
+
+/*  User Interface  */
+$btn-bg: #3f7a37;
+$btn-bg-hover: #4f9246;
+$btn-text-color: #d6e3eb;
+$btn-text-color-hover: #FFF;

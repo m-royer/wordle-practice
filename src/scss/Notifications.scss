@@ -1,0 +1,20 @@
+@import 'Colors';
+
+.doubles-wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: #2e5c7c;
+  border: solid 1px #3a6684;
+  border-radius: 3px;
+  color: #c6d7e2;
+  width: 100%;
+  max-width: 400px;
+  padding: 5px;
+
+  & img {
+    width: 1.2rem;
+    height: 1.2rem;
+    margin-right: 5px;
+  }
+}

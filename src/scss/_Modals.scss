@@ -1,3 +1,5 @@
+@import 'Colors';
+
 .modal-overlay {
   position: absolute;
   width: 100%;
@@ -11,16 +13,16 @@
   & .modal-wrapper {
     display: none;
     width: 100%;
-    max-width: 450px;
+    max-width: 400px;
     padding-bottom: 10px;
     margin: 2px;
     position: relative;
     z-index: 22;
     align-items: center;
     flex-direction: column;
-    background: #111;
-    color: #FFF;
-    border: solid 1px #191919;
+    background: $modal-bg;
+    color: $modal-text-color;
+    border: solid 1px $modal-border-color;
     border-radius: 3px;
 
     & .modal-exit {
@@ -39,7 +41,7 @@
 
     & .title {
       width: 100%;
-      background: radial-gradient(ellipse at center, rgba(85,85,85,1) 0%,rgba(51,51,51,1) 100%);
+      background: $modal-title-bg-color;
       padding: 50px 0;
       font-size: 2rem;
       font-weight: bold;
@@ -51,164 +53,6 @@
       line-height: 1.8rem;
       font-size: 1.5rem;
     }
-
-    & .settings-wrapper {
-      width: 100%;
-      padding: 1rem 0.5rem;
-
-      & .checkbox-wrapper {
-        width: 100%;
-        display: flex;
-        justify-content: space-between;
-        margin: 10px 0;
-        padding: 5px 0;
-        border-bottom: solid 1px #444;
-
-        & label {
-          text-align: left;
-          font-size: 1.3rem;
-          font-weight: bold;
-        }
-
-        /* Toggle Button */
-        & input[type=checkbox] {
-          -webkit-appearance: none;
-          -webkit-tap-highlight-color: transparent;
-          position: relative;
-          border: 0;
-          outline: 0;
-          cursor: pointer;
-        }
-
-        /* To create surface of toggle button */
-        & input[type=checkbox]:after {
-          content: '';
-          width: 3rem;
-          height: 1rem;
-          display: inline-block;
-          background: rgba(196, 195, 195, 0.55);
-          border-radius: 1rem;
-          clear: both;
-        }
-
-        /* Contents before checkbox to create toggle handle */
-        & input[type=checkbox]:before {
-          content: '';
-          width: 1.5rem;
-          height: 1.5rem;
-          display: block;
-          position: absolute;
-          left: 0;
-          top: -0.25rem;
-          border-radius: 50%;
-          background: rgb(255, 255, 255);
-          box-shadow: 1px 1px 3px rgba(0, 0, 0, 0.6);
-        }
-
-        /* Shift the handle to left on check event */
-        & input[type=checkbox]:checked:before {
-          left: 1.7rem;
-          box-shadow: -1px 1px 3px rgba(0, 0, 0, 0.6);
-        }
-        /* Background color when toggle button will be active */
-        & input[type=checkbox]:checked:after {
-          background: #16a085;
-        }
-
-        input[type=checkbox],
-        input[type=checkbox]:before,
-        input[type=checkbox]:after,
-        input[type=checkbox]:checked:before,
-        input[type=checkbox]:checked:after {
-          transition: ease .3s;
-          -webkit-transition: ease .3s;
-          -moz-transition: ease .3s;
-          -o-transition: ease .3s;
-        }
-
-        & small {
-          font-size: 0.7rem;
-          font-weight: normal;
-        }
-      }
-    }
-
-    & .statistics-wrapper {
-      margin: 0 auto;
-      display: flex;
-      width: 100%;
-      margin: 10px 0;
-      justify-content: center;
-
-      & .statistics-column {
-        display: flex;
-        flex-direction: column;
-        margin: 0 5px;
-
-        & .statistic {
-          font-size: 2.5rem;
-          text-align: center;
-        }
-
-        & .text {
-          font-size: 0.7rem;
-          text-align: center;
-        }
-      }
-    }
-
-    & .bar-wrapper {
-      width: 90%;
-      display: flex;
-      margin: 2px 0px;
-
-      & .number {
-        width: 1.5rem;
-      }
-
-      & .bar {
-        background: #333;
-        text-align: right;
-        min-width: 20px;
-        padding: 2px 5px;
-      }
-    }
-
-    & .button-wrapper {
-      display: flex;
-      justify-content: center;
-      width: 99%;
-      border-top: solid 1px #FFF;
-      padding-top: 5px;
-      gap: 10px;
-      margin: 10px 0;
-
-      & .btn {
-        background: #3f7a37;
-        color: #d6e3eb;
-        border-radius: 3px;
-        padding: 15px 30px;
-        cursor: pointer;
-        font-size: 1.2rem;
-        font-weight: bold;
-        display: flex;
-        gap: 5px;
-
-        &:hover {
-          background: #4f9246;
-          color: #FFF;
-        }
-
-        & img {
-          width: 1.2rem;
-          height: 1.2rem;
-        }
-      }
-
-      & .divider {
-        border-right: solid 1px #FFF;
-      }
-    }
   }
 
   .modal-show {
@@ -218,4 +62,28 @@
 
 .modal-show {
   display: flex;
+}
+
+.btn {
+  background: $btn-bg;
+  color: $btn-text-color;
+  border-radius: 3px;
+  padding: 15px 30px;
+  cursor: pointer;
+  font-size: 1.2rem;
+  font-weight: bold;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 5px;
+
+  &:hover {
+    background: $btn-bg-hover;
+    color: $btn-text-color-hover;
+  }
+
+  & img {
+    width: 1.2rem;
+    height: 1.2rem;
+  }
 }

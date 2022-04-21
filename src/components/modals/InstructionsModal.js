@@ -5,7 +5,7 @@ export const InstructionsModal = (props) => {
   return (
     <BaseModal 
       isShowing={props.showInstructionsModal} 
-      titleImage="" 
+      titleImage="horizon3.png" 
       handleClose={props.handleClose}
       title="HOW TO PLAY"
     >

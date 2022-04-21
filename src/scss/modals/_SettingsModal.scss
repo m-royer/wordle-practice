@@ -1,0 +1,82 @@
+@import '../Colors';
+
+.settings-wrapper {
+  width: 100%;
+  padding: 1rem 0.5rem;
+
+  & .checkbox-wrapper {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    margin: 10px 0;
+    padding: 5px 0;
+    border-bottom: solid 1px $group-border-color;
+
+    & label {
+      text-align: left;
+      font-size: 1.3rem;
+      font-weight: bold;
+    }
+
+    /* Toggle Button */
+    & input[type=checkbox] {
+      -webkit-appearance: none;
+      -webkit-tap-highlight-color: transparent;
+      position: relative;
+      border: 0;
+      outline: 0;
+      cursor: pointer;
+    }
+
+    /* To create surface of toggle button */
+    & input[type=checkbox]:after {
+      content: '';
+      width: 3rem;
+      height: 1rem;
+      display: inline-block;
+      background: $settings-toggle-unchecked-bg;
+      border-radius: 1rem;
+      clear: both;
+    }
+
+    /* Contents before checkbox to create toggle handle */
+    & input[type=checkbox]:before {
+      content: '';
+      width: 1.5rem;
+      height: 1.5rem;
+      display: block;
+      position: absolute;
+      left: 0;
+      top: -0.25rem;
+      border-radius: 50%;
+      background: $settings-toggle-button-bg;
+      box-shadow: 1px 1px 3px rgba(0, 0, 0, 0.6);
+    }
+
+    /* Shift the handle to left on check event */
+    & input[type=checkbox]:checked:before {
+      left: 1.7rem;
+      box-shadow: -1px 1px 3px rgba(0, 0, 0, 0.6);
+    }
+    /* Background color when toggle button will be active */
+    & input[type=checkbox]:checked:after {
+      background: $correct-background-color;
+    }
+
+    input[type=checkbox],
+    input[type=checkbox]:before,
+    input[type=checkbox]:after,
+    input[type=checkbox]:checked:before,
+    input[type=checkbox]:checked:after {
+      transition: ease .3s;
+      -webkit-transition: ease .3s;
+      -moz-transition: ease .3s;
+      -o-transition: ease .3s;
+    }
+
+    & small {
+      font-size: 0.7rem;
+      font-weight: normal;
+    }
+  }
+}

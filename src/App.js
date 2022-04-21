@@ -14,9 +14,9 @@ import {
 import { Navbar } from './components/navbar/Navbar'
 import { Notifications } from './components/notifications/Notifications'
 import { GameBoard } from './components/gameboard/GameBoard'
+import { ShowDoublesMessage } from './components/notifications/ShowDoublesMessage'
 import { Keyboard } from './components/keyboard/Keyboard'
 import { InstructionsModal } from './components/modals/InstructionsModal'
-import { AboutModal } from './components/modals/AboutModal'
 import { StatsModal } from './components/modals/StatsModal'
 import { SettingsModal } from './components/modals/SettingsModal'
 
@@ -31,7 +31,7 @@ function App() {
     // If not, no guesses
     return [];
   })
-  const [solution, setSolution] = useState("HOWDY")
+  const [solution, setSolution] = useState(newSolution)
   const [gameWon, setGameWon] = useState(false)
   const [gameLost, setGameLost] = useState(false)
   const [isGameRunning, setIsGameRunning] = useState(true)
@@ -39,9 +39,9 @@ function App() {
   const [currentRow, setCurrentRow] = useState(0)
   const [showSettingsModal, setShowSettingsModal] = useState(false)
   const [showStatsModal, setShowStatsModal] = useState(false)
-  const [showAboutModal, setShowAboutModal] = useState(false)
   const [showInstructionsModal, setShowInstructionsModal] = useState(false)
   const [isAnimating, setIsAnimating] = useState(false)
+  const [hasDoubles, setHasDoubles] = useState(false)
   const [notification,setNotification] = useState("init")
   const [revealedKeys, setRevealedKeys] = useState({
     missed: [],
@@ -50,19 +50,17 @@ function App() {
   })
 
   useEffect(() => {
-    if(gameWon) {
-      // show win message
-      
-    }
-  },[gameWon])
-
-  useEffect(() => {
     if(notification !== "" && !gameWon && !gameLost) {
       setTimeout(function() {
         setNotification("")
       },5000)
     }
   },[notification,gameWon,gameLost])
+
+  useEffect(() => {
+    let noDuplicates = [... new Set(solution)]
+    setHasDoubles(solution.length === noDuplicates.length ? false : true)
+  },[solution])
 
   const keyDownEnter = () => {
     if(gameWon || gameLost) {
@@ -142,7 +140,6 @@ function App() {
     <div className="App">
       <Navbar
         setShowInstructionsModal={setShowInstructionsModal}
-        setShowAboutModal={setShowAboutModal}
         setShowSettingsModal={setShowSettingsModal}
         setShowStatsModal={setShowStatsModal}
       />
@@ -157,6 +154,9 @@ function App() {
         solution={solution}
         isAnimating={isAnimating}
       />
+      <ShowDoublesMessage
+        hasDoubles={hasDoubles}
+      />
       <Keyboard 
         keyDownEnter={keyDownEnter}
         keyDownBack={keyDownBack}
@@ -169,10 +169,6 @@ function App() {
       <InstructionsModal 
         showInstructionsModal={showInstructionsModal}
         handleClose={() => setShowInstructionsModal(false)}
-      />
-      <AboutModal 
-        showAboutModal={showAboutModal}
-        handleClose={() => setShowAboutModal(false)}
       />
       <StatsModal 
         gameWon={gameWon}

@@ -1,11 +1,12 @@
+@import 'Colors';
 
 header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  background: #041826;
+  background: $navbar-bg;
   padding: 10px;
-  border-bottom: solid 1px #0e2535;
+  border-bottom: solid 1px $navbar-border-color;
   width: 100%;
 
   & .menu-container {
@@ -27,10 +28,6 @@ header {
   }
 
   & .statistics-settings {
-
-    & .statistics {
-      transform: rotate(90deg);
-    }
     
     & img {
       width: 1.5rem;

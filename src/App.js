@@ -19,6 +19,7 @@ import { Keyboard } from './components/keyboard/Keyboard'
 import { InstructionsModal } from './components/modals/InstructionsModal'
 import { StatsModal } from './components/modals/StatsModal'
 import { SettingsModal } from './components/modals/SettingsModal'
+import { share, getShareText } from './lib/share'
 
 
 
@@ -121,6 +122,12 @@ function App() {
     setNotification(solution)
   }
 
+  const handleShare = () => {
+    const shareText = getShareText(guesses, solution)
+    share(shareText)
+    setNotification("copied!")
+  }
+
   const keyDownBack = () => {
     if(currentGuess.length > 0 && isGameRunning) {
       const currentGuessArray = Array.from(currentGuess)
@@ -176,6 +183,7 @@ function App() {
         showStatsModal={showStatsModal}
         handleClose={() => setShowStatsModal(false)}
         handleRestart={handleRestart}
+        handleShare={handleShare}
       />
       <SettingsModal 
         showSettingsModal={showSettingsModal}

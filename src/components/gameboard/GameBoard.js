@@ -6,8 +6,8 @@ import { EmptyRow } from './EmptyRow'
 export const GameBoard = (props) => {
   // get completed rows
   const emptyRows = 
-    props.guesses.length < MAX_TRIES
-    ? Array.from(Array(MAX_TRIES - props.currentRow))
+    props.guesses.length < MAX_TRIES - 1
+    ? Array.from(Array(MAX_TRIES - props.currentRow - 1))
     : []
 
   return (
@@ -20,7 +20,7 @@ export const GameBoard = (props) => {
           gameWon={props.gameWon}
         />
       ))}
-      {props.guesses.length <= MAX_TRIES && (
+      {props.guesses.length <= MAX_TRIES - 1 && (
         <CurrentRow 
           currentGuess={props.currentGuess}
           gameWon={props.gameWon}

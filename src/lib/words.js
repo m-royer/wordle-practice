@@ -41,12 +41,13 @@ export const getWrongLetters = (guess, solution) => {
   return wrongLetters;
 }
 
+// return revealedKeys object
 export const calculateRevealedKeys = (guess, revealedKeys, solution) => {
   const missed = revealedKeys.missed
   const correct = revealedKeys.correct
   const wrong = revealedKeys.wrong
 
-  // correct and wrong letters only gain in numbers, missed sometimes move into correct
+  // correct and wrong only gain letters, missed sometimes move into correct
   const newMissed = [...new Set([...missed,...getMissedLetters(guess, solution)])]
   const newCorrect = [...new Set([...correct,...getCorrectLetters(guess, solution)])]
   const newWrong = [...new Set([...wrong,...getWrongLetters(guess, solution)])]
@@ -60,4 +61,19 @@ export const calculateRevealedKeys = (guess, revealedKeys, solution) => {
     correct: newCorrect,
     wrong: newWrong
   }
+}
+
+// return void
+export const calculateAllRevealedKeys = (guesses, solution) => {
+  let revealedKeys = {
+    missed: "",
+    correct: "",
+    wrong: ""
+  }
+
+  guesses.forEach(function(guess) {
+    revealedKeys = calculateRevealedKeys(guess,revealedKeys,solution)
+  })
+
+  return revealedKeys
 }

@@ -9,7 +9,8 @@ import {
 import {
   isValidWord,
   newSolution,
-  calculateRevealedKeys
+  calculateRevealedKeys,
+  calculateAllRevealedKeys
 } from './lib/words'
 import { Navbar } from './components/navbar/Navbar'
 import { Notifications } from './components/notifications/Notifications'
@@ -20,19 +21,13 @@ import { InstructionsModal } from './components/modals/InstructionsModal'
 import { StatsModal } from './components/modals/StatsModal'
 import { SettingsModal } from './components/modals/SettingsModal'
 import { share, getShareText } from './lib/share'
+import { loadGameState, saveGameState } from './lib/localStorage'
 
 
 
 function App() {
 
   const [currentGuess, setCurrentGuess] = useState("")
-  const [guesses, setGuesses] = useState(() => {
-    // Load existing game from local storage if exists
-
-    // If not, no guesses
-    return [];
-  })
-  const [solution, setSolution] = useState(newSolution)
   const [gameWon, setGameWon] = useState(false)
   const [gameLost, setGameLost] = useState(false)
   const [isGameRunning, setIsGameRunning] = useState(true)
@@ -44,12 +39,40 @@ function App() {
   const [isAnimating, setIsAnimating] = useState(false)
   const [hasDoubles, setHasDoubles] = useState(false)
   const [notification,setNotification] = useState("init")
-  const [revealedKeys, setRevealedKeys] = useState({
-    missed: [],
-    correct: [],
-    wrong: []
-  })
+  const [solution, setSolution] = useState(() => {
+    const loadState = loadGameState()
+    if(!loadState || !loadState.solution) {
+      let s = newSolution()
+      saveGameState([],s)
+      return s
+    }
 
+    return loadState?.solution
+  })
+  const [guesses, setGuesses] = useState(() => {
+    const loadState = loadGameState()
+    // no game saved or game has been won/lost
+    if(!loadState || !loadState.solution || loadState?.guesses.length === 0) {
+      return []
+    }
+
+    console.log("guesses: ",loadState.guesses.length)
+
+    if(loadState.guesses.includes(loadState.solution)) {
+      setGameWon(true)
+    }
+
+    if(loadState.guesses.length === MAX_TRIES) {
+      setGameLost(true)
+    }
+    
+    setCurrentRow(loadState.guesses.length)
+    return loadState.guesses
+  })
+  const [revealedKeys, setRevealedKeys] = useState(calculateAllRevealedKeys(guesses,solution))
+
+
+/**  HOOKS  */
   useEffect(() => {
     if(notification !== "" && !gameWon && !gameLost) {
       setTimeout(function() {
@@ -59,9 +82,55 @@ function App() {
   },[notification,gameWon,gameLost])
 
   useEffect(() => {
+    if(gameWon === true)
+      setNotification("You won!")
+
+    if(gameLost === true)
+      setNotification("No more tries remaining!")
+
+    if(gameWon || gameLost) {
+      setTimeout(function() {
+        setShowStatsModal(true)
+      },2000)
+    }
+  },[gameWon,gameLost])
+
+  useEffect(() => {
     let noDuplicates = [... new Set(solution)]
     setHasDoubles(solution.length === noDuplicates.length ? false : true)
   },[solution])
+
+  useEffect(() => {
+    saveGameState(guesses,solution)
+  },[guesses])
+
+
+/**  EVENTS  **/
+  const handleShare = () => {
+    const shareText = getShareText(guesses, solution)
+    share(shareText)
+    setNotification("copied!")
+  }
+
+  const handleRestart = () => {
+    setShowStatsModal(false)
+    setCurrentGuess("")
+    setCurrentRow(0)
+    setGuesses([])
+    
+    setRevealedKeys({
+      missed: [],
+      correct: [],
+      wrong: []
+    })
+    setGameLost(false)
+    setGameWon(false)
+    let s = newSolution()
+    saveGameState([],s)
+    setSolution(s)
+    setIsGameRunning(true)
+    setNotification(solution)
+  }
 
   const keyDownEnter = () => {
     if(gameWon || gameLost) {
@@ -74,64 +143,36 @@ function App() {
     }
 
     if(!isValidWord(currentGuess)) {
-      // not valid word
       setNotification("Invalid word")
       return
     }
 
+    // Where the magic happens
     if(currentGuess !== solution) {
       setNotification(currentGuess + " != " + solution)
       setRevealedKeys(calculateRevealedKeys(currentGuess,revealedKeys,solution))
       setGuesses([...guesses, currentGuess])
       setCurrentGuess('')
       setCurrentRow(currentRow + 1)
-      if(guesses.length === MAX_TRIES) {
+      if(guesses.length === MAX_TRIES - 1) {
         setGameLost(true)
-        setNotification("No tries left")
         setTimeout(function() {
           setShowStatsModal(true)
         },2000)
       }
     } else {
-      setNotification("You won!")
       setGuesses([...guesses, currentGuess])
       setCurrentGuess('')
       setCurrentRow(currentRow + 1)
       setIsGameRunning(false)
       setGameWon(true)
-      setTimeout(function() {
-        setShowStatsModal(true)
-      },2000)
     }
-  }
-
-  const handleRestart = () => {
-    setShowStatsModal(false)
-    setCurrentGuess("")
-    setCurrentRow(0)
-    setGuesses([])
-    setRevealedKeys({
-      missed: [],
-      correct: [],
-      wrong: []
-    })
-    setGameLost(false)
-    setGameWon(false)
-    setSolution(newSolution())
-    setIsGameRunning(true)
-    setNotification(solution)
-  }
-
-  const handleShare = () => {
-    const shareText = getShareText(guesses, solution)
-    share(shareText)
-    setNotification("copied!")
   }
 
   const keyDownBack = () => {
     if(currentGuess.length > 0 && isGameRunning) {
       const currentGuessArray = Array.from(currentGuess)
-      currentGuessArray.pop();
+      currentGuessArray.pop()
       setCurrentGuess(currentGuessArray.join(''))
     }
   }

@@ -4,6 +4,11 @@ import { BaseModal } from './BaseModal.js'
 
 export const StatsModal = (props) => {
 
+  const largestStat = props.stats.distribution.reduce((largest,current) => {
+    return Math.max(largest, current)
+  })
+  const winPercent = Math.round(100 * props.stats.totalWon / Math.max(props.stats.practiced,1))
+
   return (
     <BaseModal 
       isShowing={props.showStatsModal} 
@@ -14,31 +19,31 @@ export const StatsModal = (props) => {
         <div className="statistics-wrapper">
           <div className="statistics-row">
             <div className="statistics-column">
-              <div className="statistic">7</div>
+              <div className="statistic">{props.stats.practiced}</div>
               <div className="text">Practiced</div>
             </div>
             <div className="statistics-column">
-              <div className="statistic">98</div>
+              <div className="statistic">{winPercent}</div>
               <div className="text">Win %</div>
             </div>
             <div className="statistics-column">
-              <div className="statistic">7</div>
+              <div className="statistic">{props.stats.currentStreak}</div>
               <div className="text">Current<br /> Streak</div>
             </div>
             <div className="statistics-column">
-              <div className="statistic">7</div>
+              <div className="statistic">{props.stats.maxStreak}</div>
               <div className="text">Max<br /> Streak</div>
             </div>
           </div>
           <div className="sub-title">
             GUESS DISTRIBUTION
           </div>
-          {Array.from({length: 6}, (v, i) => i + 1).map( (num,i) => (
+          {props.stats.distribution.map( (num,i) => (
             <div className="bar-wrapper" key={i}>
               <div className="number">
-                {num}
+                {i + 1}
               </div>
-              <div className="bar" style={{ width: Math.floor(Math.random() * 100) + '%' }}>{num}</div>
+              <div className="bar" style={{ width: Math.round(100 * (num / largestStat) ) + '%' }}>{num}</div>
             </div>
           ))}
           { (props.gameWon || props.gameLost) && 

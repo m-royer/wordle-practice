@@ -21,7 +21,14 @@ import { InstructionsModal } from './components/modals/InstructionsModal'
 import { StatsModal } from './components/modals/StatsModal'
 import { SettingsModal } from './components/modals/SettingsModal'
 import { share, getShareText } from './lib/share'
-import { loadGameState, saveGameState } from './lib/localStorage'
+import { 
+  loadGameState, 
+  loadGameStats, 
+  saveGameState, 
+  saveGameStats,
+  addStats,
+  checkGameStats
+} from './lib/localStorage'
 
 
 
@@ -31,14 +38,14 @@ function App() {
   const [gameWon, setGameWon] = useState(false)
   const [gameLost, setGameLost] = useState(false)
   const [isGameRunning, setIsGameRunning] = useState(true)
-  const [stats, setStats] = useState(false)
+  const [stats, setStats] = useState(loadGameStats)
   const [currentRow, setCurrentRow] = useState(0)
-  const [showSettingsModal, setShowSettingsModal] = useState(false)
+  const [showInstructionsModal, setShowInstructionsModal] = useState(() => {return !checkGameStats()})
   const [showStatsModal, setShowStatsModal] = useState(false)
-  const [showInstructionsModal, setShowInstructionsModal] = useState(false)
+  const [showSettingsModal, setShowSettingsModal] = useState(false)
   const [isAnimating, setIsAnimating] = useState(false)
   const [hasDoubles, setHasDoubles] = useState(false)
-  const [notification,setNotification] = useState("init")
+  const [notification,setNotification] = useState("")
   const [solution, setSolution] = useState(() => {
     const loadState = loadGameState()
     if(!loadState || !loadState.solution) {
@@ -50,13 +57,11 @@ function App() {
     return loadState?.solution
   })
   const [guesses, setGuesses] = useState(() => {
-    const loadState = loadGameState()
+    let loadState = loadGameState()
     // no game saved or game has been won/lost
     if(!loadState || !loadState.solution || loadState?.guesses.length === 0) {
       return []
     }
-
-    console.log("guesses: ",loadState.guesses.length)
 
     if(loadState.guesses.includes(loadState.solution)) {
       setGameWon(true)
@@ -96,13 +101,17 @@ function App() {
   },[gameWon,gameLost])
 
   useEffect(() => {
-    let noDuplicates = [... new Set(solution)]
-    setHasDoubles(solution.length === noDuplicates.length ? false : true)
+    let uniques = [... new Set(solution)]
+    setHasDoubles(solution.length === uniques.length ? false : true)
   },[solution])
 
   useEffect(() => {
     saveGameState(guesses,solution)
   },[guesses])
+
+  useEffect(() => {
+    saveGameStats(stats)
+  },[stats])
 
 
 /**  EVENTS  **/
@@ -117,7 +126,6 @@ function App() {
     setCurrentGuess("")
     setCurrentRow(0)
     setGuesses([])
-    
     setRevealedKeys({
       missed: [],
       correct: [],
@@ -149,13 +157,14 @@ function App() {
 
     // Where the magic happens
     if(currentGuess !== solution) {
-      setNotification(currentGuess + " != " + solution)
+      //setNotification(currentGuess + " != " + solution)
       setRevealedKeys(calculateRevealedKeys(currentGuess,revealedKeys,solution))
       setGuesses([...guesses, currentGuess])
       setCurrentGuess('')
       setCurrentRow(currentRow + 1)
       if(guesses.length === MAX_TRIES - 1) {
         setGameLost(true)
+        setStats(addStats(stats,currentRow + 1))
         setTimeout(function() {
           setShowStatsModal(true)
         },2000)
@@ -164,6 +173,7 @@ function App() {
       setGuesses([...guesses, currentGuess])
       setCurrentGuess('')
       setCurrentRow(currentRow + 1)
+      setStats(addStats(stats,currentRow))
       setIsGameRunning(false)
       setGameWon(true)
     }
@@ -222,6 +232,7 @@ function App() {
         gameWon={gameWon}
         gameLost={gameLost}
         showStatsModal={showStatsModal}
+        stats={stats}
         handleClose={() => setShowStatsModal(false)}
         handleRestart={handleRestart}
         handleShare={handleShare}

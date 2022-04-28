@@ -1,12 +1,10 @@
 import {
-  getMissedLetters,
-  getWrongLetters
+  getMissedLetters
 } from '../../lib/words'
 
 export const CompletedRow = (props) => {
   const letters = Array.from(props.word)
   const missedLetters = getMissedLetters(props.word,props.solution)
-  const wrongLetters = getWrongLetters(props.word,props.solution)
 
   return (
     <div className="game-row">
@@ -16,8 +14,7 @@ export const CompletedRow = (props) => {
           className={
             (props.solution[i] === letter && "correct") ||
             (missedLetters.indexOf(letter) > -1 && "missed") ||
-            (wrongLetters.indexOf(letter) > -1 && "wrong") ||
-            ""
+            "wrong"
           }
         >
           {letter}

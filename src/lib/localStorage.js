@@ -17,7 +17,10 @@ export const saveGameState = (guesses, solution) => {
 
 export const checkGameStats = () => {
   const gameStats = localStorage.getItem(GAME_STATS_KEY)
-  return gameStats ? true : false;
+  if(!gameStats || !gameStats.practiced)
+    return false
+  
+  return (JSON.parse(gameStats.practiced) > 0 ? true : false) ?? false
 }
 
 export const loadGameStats = () => {
@@ -35,7 +38,7 @@ export const saveGameStats = (gameStats) => {
   localStorage.setItem(GAME_STATS_KEY,JSON.stringify(gameStats))
 }
 
-export const addStats = (stats,guessCount) => {
+export const updateStats = (stats,guessCount) => {
   const newStats = {... stats}
   newStats.practiced += 1
   
@@ -50,5 +53,6 @@ export const addStats = (stats,guessCount) => {
     }
   }
 
+  saveGameStats(newStats)
   return newStats
 }

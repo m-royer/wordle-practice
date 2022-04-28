@@ -26,7 +26,7 @@ import {
   loadGameStats, 
   saveGameState, 
   saveGameStats,
-  addStats,
+  updateStats,
   checkGameStats
 } from './lib/localStorage'
 
@@ -109,10 +109,6 @@ function App() {
     saveGameState(guesses,solution)
   },[guesses])
 
-  useEffect(() => {
-    saveGameStats(stats)
-  },[stats])
-
 
 /**  EVENTS  **/
   const handleShare = () => {
@@ -137,7 +133,6 @@ function App() {
     saveGameState([],s)
     setSolution(s)
     setIsGameRunning(true)
-    setNotification(solution)
   }
 
   const keyDownEnter = () => {
@@ -164,7 +159,7 @@ function App() {
       setCurrentRow(currentRow + 1)
       if(guesses.length === MAX_TRIES - 1) {
         setGameLost(true)
-        setStats(addStats(stats,currentRow + 1))
+        setStats(updateStats(stats,currentRow + 1))
         setTimeout(function() {
           setShowStatsModal(true)
         },2000)
@@ -173,7 +168,7 @@ function App() {
       setGuesses([...guesses, currentGuess])
       setCurrentGuess('')
       setCurrentRow(currentRow + 1)
-      setStats(addStats(stats,currentRow))
+      setStats(updateStats(stats,currentRow))
       setIsGameRunning(false)
       setGameWon(true)
     }

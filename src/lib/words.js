@@ -11,7 +11,7 @@ export const newSolution = () => {
 export const getMissedLetters = (guess, solution) => {
   const missedLetters = []
   Array.from(guess || []).forEach( (letter, i) => {
-    if( (solution.includes(letter)) && (solution.indexOf(letter) !== i) ) {
+    if( solution.includes(letter) && (guess.indexOf(letter) !== solution.indexOf(letter)) && (solution.indexOf(letter) !== i) ) {
       missedLetters.push(letter)
     }
   })

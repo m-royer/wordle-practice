@@ -50,7 +50,11 @@ export const StatsModal = (props) => {
             <div className="button-wrapper">
               <div className="btn" onClick={() => props.handleRestart()}>NEW WORD <img src={newWord} alt="icon showing a word being replaced" /></div>
               <div className="divider"></div>
-              <div className="btn" onClick={() => props.handleShare()}>SHARE <img src={share} alt="share icon" /></div>
+              <div className="btn" onClick={() => props.handleShare()}>
+                <span className={(props.hasShared && "shared-message-show") || ""}>Copied!</span>
+                SHARE
+                <img src={share} alt="share icon" />
+              </div>
             </div>
           }
         </div>

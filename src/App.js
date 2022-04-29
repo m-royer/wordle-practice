@@ -1,4 +1,4 @@
-import './scss/App.scss'
+//import './scss/App.scss'
 import { useState, useEffect } from 'react'
 import { 
   WORD_LENGTH, 
@@ -49,6 +49,7 @@ function App() {
   const [showSettingsModal, setShowSettingsModal] = useState(false)
   const [isAnimating, setIsAnimating] = useState(false)
   const [hasDoubles, setHasDoubles] = useState(false)
+  const [hasShared, setHasShared] = useState(false)
   const [notification,setNotification] = useState("")
   const [solution, setSolution] = useState(() => {
     const loadState = loadGameState()
@@ -117,9 +118,14 @@ function App() {
 
 /**  EVENTS  **/
   const handleShare = () => {
-    const shareText = getShareText(guesses, solution, highContrast)
-    share(shareText)
-    setNotification("copied!")
+    if(!hasShared) {
+      const shareText = getShareText(guesses, solution, highContrast)
+      share(shareText)
+      setHasShared(true)
+      setTimeout(() => {
+        setHasShared(false)
+      },2000)
+    }
   }
 
   const handleRestart = () => {
@@ -155,7 +161,6 @@ function App() {
       return
     }
 
-    // Hard mode stuff
     if(hardMode) {
       const hasUnused = findUnused(currentGuess, guesses, solution)
       if(hasUnused) {
@@ -164,6 +169,7 @@ function App() {
       }
     }
 
+    // Reveal the guess
     setIsAnimating(true)
     setTimeout(() => {
       setIsAnimating(false)
@@ -171,7 +177,7 @@ function App() {
 
     // Where the magic happens
     if(currentGuess !== solution) {
-      setNotification(currentGuess + " != " + solution)
+      //setNotification(currentGuess + " != " + solution)
       setRevealedKeys(calculateRevealedKeys(currentGuess,revealedKeys,solution))
       setGuesses([...guesses, currentGuess])
       setCurrentGuess('')
@@ -254,6 +260,7 @@ function App() {
         handleClose={() => setShowStatsModal(false)}
         handleRestart={handleRestart}
         handleShare={handleShare}
+        hasShared={hasShared}
       />
       <SettingsModal 
         showSettingsModal={showSettingsModal}

@@ -56,15 +56,49 @@
     gap: 10px;
     margin: 10px 0;
 
-    @media (max-width: 400px) {
+    @media (max-width: 450px) {
       & .btn {
-        font-size: 1rem;
+        font-size: 0.9rem;
         padding: 15px 25px;
       }
     }
 
     & .divider {
       border-right: solid 1px $group-border-color;
+    }
+
+    & .btn {
+      position: relative;
+
+      & .shared-message-show {
+        display: block;
+      }
+      
+      & span {
+        display: none;
+        position: absolute;
+        z-index: 25;
+        top: -2em;
+        background: #FFF;
+        color: #000;
+        padding: 10px 15px;
+        border-radius: 2px;
+        box-shadow: 0 2px 5px rgba(0,0,0,0.5);
+      }
+
+      & span:before {
+        content: "";
+        width: 0px;
+        height: 0px;
+        position: absolute;
+        z-index: 20;
+        top: 2em;
+        right: 1em;
+        border-left: 7px solid transparent;
+        border-right: 7px solid #FFF;
+        border-top: 7px solid #FFF;
+        border-bottom: 7px solid transparent;
+      }
     }
   }
 }

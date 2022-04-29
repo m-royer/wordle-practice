@@ -7,7 +7,7 @@ export const CompletedRow = (props) => {
   const missedLetters = getMissedLetters(props.word,props.solution)
 
   return (
-    <div className="game-row">
+    <div className={"game-row " + (props.isAnimating && "animating")}>
       {letters.map((letter, i) => (
         <div 
           key={i}

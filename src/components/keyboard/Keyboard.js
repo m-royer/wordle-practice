@@ -65,7 +65,7 @@ export const Keyboard = (props) => {
           />
         ))}
       </div>
-      { (props.gameWon || props.gameLost) &&
+      { !props.isAnimating && (props.gameWon || props.gameLost) &&
       <div className="game-over-overlay">
           <p>GAME OVER</p>
           <div className="btn" onClick={() => props.handleRestart()}>NEW WORD <img src={newWord} alt="icon showing a word being replaced" /></div>

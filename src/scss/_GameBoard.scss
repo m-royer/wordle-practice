@@ -23,11 +23,13 @@
             border: solid 2px $empty-cell-border-color;
             user-select: none;
             border-radius: 3px;
+            transition: all 200ms ease-in;
 
             &.correct {
                 background: $correct-background-color;
                 border: solid 2px $correct-border-color;
                 box-shadow: 0px 0px 10px 0px $correct-glow-color;
+                animation: correct-pulse 300ms infinite;
             }
 
             &.missed {
@@ -38,14 +40,52 @@
             &.wrong {
                 background: $wrong-background-color;
             }
+
+            @keyframes correct-pulse {
+                0% {
+                    box-shadow: 0px 0px 9px 0px $correct-glow-color;
+                }
+                20% {
+                    box-shadow: 1px 0px 10px 0px $correct-glow-color;
+                }
+                40% {
+                    box-shadow: 1px 0px 8px 0px $correct-glow-color;
+                }
+                60% {
+                    box-shadow: 0px 1px 10px 0px $correct-glow-color;
+                }
+                80% {
+                    box-shadow: 0px 1px 11px 0px $correct-glow-color;
+                }
+                100% {
+                    box-shadow: 0px 0px 12px 0px $correct-glow-color;
+                }
+            }
         }
 
         &.animating {
-
             & div {
-                animation-name: scaleIn;
                 animation-duration: 300ms;
-                scale: 0;
+                animation-timing-function: ease-in-out;
+                animation-iteration-count: 1;
+                animation-fill-mode: forwards;
+                border: solid 2px $empty-cell-border-color;
+                box-shadow: none;
+                background: none;
+                color: #FFF;
+            }
+
+            & div.correct {
+                animation-name: keyRevealDesync, keyRevealCorrect;
+                animation-duration: 300ms, 600ms;
+            }
+
+            & div.missed {
+                animation-name: keyRevealDesync, keyRevealMissed;
+            }
+
+            & div.wrong {
+                animation-name: keyRevealDesync, keyRevealWrong;
             }
 
             @for $i from 1 to 6 {
@@ -55,12 +95,81 @@
             }
         }
 
-        @keyframes scaleIn {
+        @keyframes keyRevealDesync {
+            0% {
+                transform: translate(0,0);
+                filter: blur(0);
+            }
+            20% {
+                transform: translate(1.5rem,1rem);
+                filter: blur(1px);
+            }
+            30% {
+                transform: translate(0,0);
+                filter: blur(0);
+            }
+            40% {
+                transform: translate(-1rem,-1rem);
+                filter: blur(1px);
+            }
+            50% {
+                transform: translate(0,0);
+                filter: blur(0);
+            }
+            60% {
+                transform: translate(1rem,1rem);
+                filter: blur(2px);
+            }
+            70% {
+                transform: translate(0,0);
+                filter: blur(0);
+            }
+            80% {
+                transform: translate(-1.5rem,1rem);
+                filter: blur(5px);
+            }
+            100% {
+                transform: translate(0,0);
+                filter: blur(0);
+            }
+        }
+
+        @keyframes keyRevealCorrect {
+            0% {
+                background: none;
+                border: solid 2px $empty-cell-border-color;
+                box-shadow: 0 0 0 0 $correct-background-color;
+            }
+            50% {
+                background: $correct-background-color;
+                border: solid 2px $correct-border-color;
+                box-shadow: 0px 0px 50px 0px $correct-glow-color;
+            }
+            100% {
+                background: $correct-background-color;
+                border: solid 2px $correct-border-color;
+                box-shadow: 0px 0px 10px 0px $correct-glow-color;
+            }
+        }
+
+        @keyframes keyRevealMissed {
             from {
-                scale: 0;
+                background: none;
+                border: solid 2px $empty-cell-border-color;
             }
             to {
-                scale: 1;
+                background: $missed-background-color;
+                border: solid 2px $missed-border-color;
+            }
+        }
+
+        @keyframes keyRevealWrong {
+            from {
+                background: none;
+                border: solid 2px $empty-cell-border-color;
+            }
+            to {
+                background: $wrong-background-color;
             }
         }
     }

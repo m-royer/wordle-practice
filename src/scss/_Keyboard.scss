@@ -21,7 +21,7 @@
             align-items: center;
             width: 48px;
             height: 56px;
-            background: #757575;
+            background: $key-color;
             font-size: 1rem;
             color: #FFF;
             margin: 3px;
@@ -50,6 +50,7 @@
             &.enter {
                 padding: 0 10px;
                 background: $important-key-color;
+                font-size: 0.9rem;
             }
 
             &.back {

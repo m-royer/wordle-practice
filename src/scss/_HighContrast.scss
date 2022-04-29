@@ -1,0 +1,82 @@
+@import 'Colors';
+
+.App.high-contrast {
+  background: #000;
+  color: #FFF;
+
+  & header {
+    background: #222;
+    border: none;
+  }
+
+  & .game-board .game-row {
+    & div {
+      border: solid 2px $empty-cell-border-color-hc;
+    }
+
+    & .correct {
+      background: $correct-background-color-hc;
+      border: none;
+      box-shadow: none;
+      animation: none;
+    }
+
+    & .missed {
+      background: $missed-background-color-hc;
+      border: none;
+    }
+
+    & .wrong {
+      background: $wrong-background-color-hc;
+      border: none;
+    }
+
+    &.animating {
+
+      & div {
+        box-shadow: none;
+      }
+
+      & div.correct {
+        animation: none;
+        box-shadow: none;
+      }
+      & div.missed {
+        animation: none;
+        box-shadow: none;
+      }
+      & div.wrong {
+        animation: none;
+        box-shadow: none;
+      }
+    }
+  }
+
+  & .keyboard-container .keyboard-row div {
+
+    &.correct {
+      background: $correct-background-color-hc;
+      color: #FFF;
+      border: none;
+      box-shadow: none;
+    }
+
+    &.missed {
+      background: $missed-background-color-hc;
+      color: #FFF;
+      border: none;
+    }
+
+    &.wrong {
+      background: $wrong-background-color-hc;
+      color: #FFF;
+    }
+  }
+
+  & .settings-wrapper .checkbox-wrapper {
+
+    & input[type=checkbox]:checked:after {
+      background: $correct-background-color-hc;
+    }
+  }
+}

@@ -77,3 +77,24 @@ export const calculateAllRevealedKeys = (guesses, solution) => {
 
   return revealedKeys
 }
+
+export const findUnused = (currentGuess, guesses, solution) => {
+  if(guesses.length === 0)
+    return false
+
+  const lettersLeft = []
+  const lastGuess = guesses[guesses.length - 1]
+  const correctLetters = getCorrectLetters(currentGuess,solution)
+  const missedLetters = getMissedLetters(currentGuess,solution)
+
+  for( let i=0; i < currentGuess.length; i++) {
+    if(correctLetters.includes(currentGuess[i]) || missedLetters.includes(currentGuess[i])) {
+      lettersLeft.push(currentGuess[i])
+    }
+    if(correctLetters.includes(currentGuess[i]) && currentGuess[i] !== lastGuess[i]) {
+      return "Must use " + currentGuess[i] + " in position " + i
+    }
+  }
+
+  return false
+}

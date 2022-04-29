@@ -2,15 +2,15 @@ import './scss/App.scss'
 import { useState, useEffect } from 'react'
 import { 
   WORD_LENGTH, 
-  MAX_TRIES, 
-  HARD_MODE,
+  MAX_TRIES,
   ANIMATION_TIME
 } from './constants/settings'
 import {
   isValidWord,
   newSolution,
   calculateRevealedKeys,
-  calculateAllRevealedKeys
+  calculateAllRevealedKeys,
+  findUnused
 } from './lib/words'
 import { Navbar } from './components/navbar/Navbar'
 import { Notifications } from './components/notifications/Notifications'
@@ -24,10 +24,12 @@ import { share, getShareText } from './lib/share'
 import { 
   loadGameState, 
   loadGameStats, 
-  saveGameState, 
-  saveGameStats,
+  saveGameState,
   updateStats,
-  checkGameStats
+  checkGameStats,
+  loadHardMode,
+  loadHighContrast,
+  saveSettings
 } from './lib/localStorage'
 
 
@@ -39,6 +41,8 @@ function App() {
   const [gameLost, setGameLost] = useState(false)
   const [isGameRunning, setIsGameRunning] = useState(true)
   const [stats, setStats] = useState(loadGameStats)
+  const [hardMode, setHardMode] = useState(loadHardMode())
+  const [highContrast, setHighContrast] = useState(loadHighContrast())
   const [currentRow, setCurrentRow] = useState(0)
   const [showInstructionsModal, setShowInstructionsModal] = useState(() => {return !checkGameStats()})
   const [showStatsModal, setShowStatsModal] = useState(false)
@@ -64,10 +68,12 @@ function App() {
     }
 
     if(loadState.guesses.includes(loadState.solution)) {
+      setShowStatsModal(true)
       setGameWon(true)
     }
 
     if(loadState.guesses.length === MAX_TRIES) {
+      setShowStatsModal(true)
       setGameLost(true)
     }
     
@@ -75,6 +81,7 @@ function App() {
     return loadState.guesses
   })
   const [revealedKeys, setRevealedKeys] = useState(calculateAllRevealedKeys(guesses,solution))
+
 
 
 /**  HOOKS  */
@@ -92,27 +99,25 @@ function App() {
 
     if(gameLost === true)
       setNotification("No more tries remaining!")
-
-    if(gameWon || gameLost) {
-      setTimeout(function() {
-        setShowStatsModal(true)
-      },2000)
-    }
   },[gameWon,gameLost])
 
   useEffect(() => {
-    let uniques = [... new Set(solution)]
+    let uniques = [...new Set(solution)]
     setHasDoubles(solution.length === uniques.length ? false : true)
   },[solution])
 
   useEffect(() => {
     saveGameState(guesses,solution)
-  },[guesses])
+  },[guesses,solution])
+
+  useEffect(() => {
+    saveSettings(hardMode,highContrast)
+  },[hardMode,highContrast])
 
 
 /**  EVENTS  **/
   const handleShare = () => {
-    const shareText = getShareText(guesses, solution)
+    const shareText = getShareText(guesses, solution, highContrast)
     share(shareText)
     setNotification("copied!")
   }
@@ -150,9 +155,23 @@ function App() {
       return
     }
 
+    // Hard mode stuff
+    if(hardMode) {
+      const hasUnused = findUnused(currentGuess, guesses, solution)
+      if(hasUnused) {
+        setNotification(hasUnused)
+        return
+      }
+    }
+
+    setIsAnimating(true)
+    setTimeout(() => {
+      setIsAnimating(false)
+    },ANIMATION_TIME * 6)
+
     // Where the magic happens
     if(currentGuess !== solution) {
-      //setNotification(currentGuess + " != " + solution)
+      setNotification(currentGuess + " != " + solution)
       setRevealedKeys(calculateRevealedKeys(currentGuess,revealedKeys,solution))
       setGuesses([...guesses, currentGuess])
       setCurrentGuess('')
@@ -162,7 +181,7 @@ function App() {
         setStats(updateStats(stats,currentRow + 1))
         setTimeout(function() {
           setShowStatsModal(true)
-        },2000)
+        },ANIMATION_TIME * 6 + 500)
       }
     } else {
       setGuesses([...guesses, currentGuess])
@@ -171,6 +190,9 @@ function App() {
       setStats(updateStats(stats,currentRow))
       setIsGameRunning(false)
       setGameWon(true)
+      setTimeout(function() {
+        setShowStatsModal(true)
+      },ANIMATION_TIME * 6 + 500)
     }
   }
 
@@ -190,7 +212,7 @@ function App() {
 
 
   return (
-    <div className="App">
+    <div className={"App " + ((highContrast && "high-contrast") || "")}>
       <Navbar
         setShowInstructionsModal={setShowInstructionsModal}
         setShowSettingsModal={setShowSettingsModal}
@@ -217,6 +239,7 @@ function App() {
         revealedKeys={revealedKeys}
         gameLost={gameLost}
         gameWon={gameWon}
+        isAnimating={isAnimating}
         handleRestart={handleRestart}
       />
       <InstructionsModal 
@@ -235,6 +258,14 @@ function App() {
       <SettingsModal 
         showSettingsModal={showSettingsModal}
         handleClose={() => setShowSettingsModal(false)}
+        hardMode={hardMode}
+        highContrast={highContrast}
+        gameWon={gameWon}
+        gameLost={gameLost}
+        guesses={guesses}
+        setNotification={setNotification}
+        setHardMode={setHardMode}
+        setHighContrast={setHighContrast}
       />
     </div>
   )

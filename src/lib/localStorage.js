@@ -17,10 +17,18 @@ export const saveGameState = (guesses, solution) => {
 
 export const checkGameStats = () => {
   const gameStats = localStorage.getItem(GAME_STATS_KEY)
-  if(!gameStats || !gameStats.practiced)
+  if(!gameStats){
     return false
+  }
+  let parsed = {}
+
+    try {
+      parsed = JSON.parse(gameStats)
+    } catch(e) {
+      return false
+    }
   
-  return (JSON.parse(gameStats.practiced) > 0 ? true : false) ?? false
+  return parsed?.practiced > 0 ? true : false
 }
 
 export const loadGameStats = () => {
@@ -39,7 +47,7 @@ export const saveGameStats = (gameStats) => {
 }
 
 export const updateStats = (stats,guessCount) => {
-  const newStats = {... stats}
+  const newStats = {...stats}
   newStats.practiced += 1
   
   if(guessCount >= MAX_TRIES) {
@@ -55,4 +63,29 @@ export const updateStats = (stats,guessCount) => {
 
   saveGameStats(newStats)
   return newStats
+}
+
+export const loadSettings = () => {
+  const gameSettings = localStorage.getItem(GAME_SETTINGS_KEY)
+  return gameSettings ? JSON.parse(gameSettings) : null
+}
+
+export const loadHardMode = () => {
+  let s = loadSettings()
+  if(null === s || [null,null] === s) 
+    return false
+  
+  return typeof s.hardMode === "boolean" ? s.hardMode : false
+}
+
+export const saveSettings = (hardMode,highContrast) => {
+  localStorage.setItem(GAME_SETTINGS_KEY,JSON.stringify({"hardMode": hardMode,"highContrast": highContrast}))
+}
+
+export const loadHighContrast = () => {
+  let s = loadSettings()
+  if(null === s || [null,null] === s)
+    return false
+
+  return typeof s.highContrast === "boolean" ? s.highContrast : false
 }

@@ -18,13 +18,13 @@ export const GameBoard = (props) => {
           word={row}
           solution={props.solution}
           gameWon={props.gameWon}
+          isAnimating={(i === props.guesses.length - 1) ? props.isAnimating : false}
         />
       ))}
       {props.guesses.length <= MAX_TRIES - 1 && (
         <CurrentRow 
           currentGuess={props.currentGuess}
           gameWon={props.gameWon}
-          isRevealing={false}
         />
       )}
       {emptyRows.map( (row,i) => (

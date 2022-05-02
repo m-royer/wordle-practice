@@ -79,22 +79,42 @@ export const calculateAllRevealedKeys = (guesses, solution) => {
 }
 
 export const findUnused = (currentGuess, guesses, solution) => {
-  if(guesses.length === 0)
+  if(guesses.length === 0){
+    console.log("first guess")
     return false
+  }
 
   const lettersLeft = []
   const lastGuess = guesses[guesses.length - 1]
-  const correctLetters = getCorrectLetters(currentGuess,solution)
-  const missedLetters = getMissedLetters(currentGuess,solution)
+  const correctLetters = getCorrectLetters(lastGuess,solution)
+  const missedLetters = getMissedLetters(lastGuess,solution)
+  console.log("Correct", correctLetters)
+  console.log("Missed", missedLetters)
 
-  for( let i=0; i < currentGuess.length; i++) {
-    if(correctLetters.includes(currentGuess[i]) || missedLetters.includes(currentGuess[i])) {
-      lettersLeft.push(currentGuess[i])
+  // build a list of letters we want to check later OR return if they changed a letter that was correct in the previous guess to a different spot
+  for(let i=0; i < lastGuess.length; i++) {
+    if( (correctLetters.includes(lastGuess[i]) || missedLetters.includes(lastGuess[i])) ) {
+      lettersLeft.push(lastGuess[i])
     }
-    if(correctLetters.includes(currentGuess[i]) && currentGuess[i] !== lastGuess[i]) {
-      return "Must use " + currentGuess[i] + " in position " + i
+    // bugs out on duplicate letters in the current guess, so we just search to make sure the first instance of the letter is included
+    if(correctLetters.includes(lastGuess[i]) && currentGuess.indexOf(lastGuess[i]) !== lastGuess.indexOf(lastGuess[i])) {
+      return "Must use " + lastGuess[i] + " in position " + (i+1)
     }
   }
 
+  // go through the rest of the guess and return the first unused letter
+  let letterPosition
+  for (let letter of currentGuess) {
+    letterPosition = lettersLeft.indexOf(letter)
+    if(letterPosition !== -1) {
+      lettersLeft.splice(letterPosition,1)
+    }
+  }
+
+  if(lettersLeft.length > 0) {
+    return "Guess must contain " + lettersLeft[0]
+  }
+
+  console.log("No letters left")
   return false
 }

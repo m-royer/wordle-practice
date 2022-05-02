@@ -4,7 +4,6 @@ import external from '../../external.svg'
 export const SettingsModal = (props) => {
 
   const toggleHardMode = () => {
-    console.log(props.guesses)
     if(props.gameWon || props.gameLost ||  props.guesses.length > 0) {
       props.handleClose()
       props.setNotification("Can only activate hard mode at the start of a game before any guesses!")

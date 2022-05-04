@@ -38,6 +38,7 @@ export const loadGameStats = () => {
     totalWon: 0,
     currentStreak: 0,
     maxStreak: 0,
+    previousGameTries: 0,
     distribution: Array.from(new Array(MAX_TRIES), () => 0)
   }
 }
@@ -49,6 +50,7 @@ export const saveGameStats = (gameStats) => {
 export const updateStats = (stats,guessCount) => {
   const newStats = {...stats}
   newStats.practiced += 1
+  newStats.previousGameTries = guessCount
   
   if(guessCount >= MAX_TRIES) {
     newStats.currentStreak = 0

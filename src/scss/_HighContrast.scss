@@ -1,7 +1,7 @@
 @import 'Colors';
 
 .App.high-contrast {
-  background: #000;
+  background: $body-bg-hc;
   color: #FFF;
 
   & header {
@@ -78,5 +78,9 @@
     & input[type=checkbox]:checked:after {
       background: $correct-background-color-hc;
     }
+  }
+
+  & .keyboard-container .game-over-overlay {
+    background: rgba($body-bg-hc, 0.5)
   }
 }

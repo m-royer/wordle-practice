@@ -47,10 +47,10 @@ function App() {
   const [showInstructionsModal, setShowInstructionsModal] = useState(() => {return !checkGameStats()})
   const [showStatsModal, setShowStatsModal] = useState(false)
   const [showSettingsModal, setShowSettingsModal] = useState(false)
+  const [notification, setNotification] = useState("")
   const [isAnimating, setIsAnimating] = useState(false)
   const [hasDoubles, setHasDoubles] = useState(false)
   const [hasShared, setHasShared] = useState(false)
-  const [notification,setNotification] = useState("")
   const [solution, setSolution] = useState(() => {
     const loadState = loadGameState()
     if(!loadState || !loadState.solution) {
@@ -95,12 +95,16 @@ function App() {
   },[notification,gameWon,gameLost])
 
   useEffect(() => {
-    if(gameWon === true)
+    if(isGameRunning && gameWon) {
       setNotification("You won!")
+      setIsGameRunning(false)
+    }
 
-    if(gameLost === true)
+    if(isGameRunning && gameLost) {
       setNotification("No more tries remaining!")
-  },[gameWon,gameLost])
+      setIsGameRunning(false)
+    }
+  },[gameWon,gameLost,isGameRunning])
 
   useEffect(() => {
     let uniques = [...new Set(solution)]
@@ -143,6 +147,7 @@ function App() {
     let s = newSolution()
     saveGameState([],s)
     setSolution(s)
+    setNotification("")
     setIsGameRunning(true)
   }
 
@@ -177,7 +182,7 @@ function App() {
 
     // Where the magic happens
     if(currentGuess !== solution) {
-      //setNotification(currentGuess + " != " + solution)
+      setNotification("")
       setRevealedKeys(calculateRevealedKeys(currentGuess,revealedKeys,solution))
       setGuesses([...guesses, currentGuess])
       setCurrentGuess('')
@@ -194,7 +199,6 @@ function App() {
       setCurrentGuess('')
       setCurrentRow(currentRow + 1)
       setStats(updateStats(stats,currentRow))
-      setIsGameRunning(false)
       setGameWon(true)
       setTimeout(function() {
         setShowStatsModal(true)
@@ -225,8 +229,7 @@ function App() {
         setShowStatsModal={setShowStatsModal}
       />
       <Notifications 
-        isNotifying={false}
-        message={notification}
+        notification={notification}
       />
       <GameBoard 
         currentGuess={currentGuess} 

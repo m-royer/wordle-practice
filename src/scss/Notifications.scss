@@ -1,5 +1,33 @@
 @import 'Colors';
 
+.alert {
+  display: none;
+  position: absolute;
+  z-index: 100;
+  top: 4rem;
+  background: #FFF;
+  border-radius: 3px;
+  box-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+  color: #000;
+  padding: 15px 25px;
+}
+
+.alert.show {
+  display: flex;
+  animation: show 500ms 1;
+}
+
+@keyframes show {
+  from {
+    transform: translateY(-10px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
 .doubles-wrapper {
   display: flex;
   justify-content: center;

@@ -45,6 +45,10 @@
       min-width: 20px;
       padding: 2px 5px;
     }
+
+    & .bar.highlighted {
+      background: $correct-background-color;
+    }
   }
 
   & .button-wrapper {

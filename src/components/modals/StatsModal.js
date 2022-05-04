@@ -43,7 +43,7 @@ export const StatsModal = (props) => {
               <div className="number">
                 {i + 1}
               </div>
-              <div className="bar" style={{ width: Math.round(100 * (num / largestStat) ) + '%' }}>{num}</div>
+              <div className={"bar " + (props.stats.previousGameTries === i ? "highlighted" : "")} style={{ width: Math.round(100 * (num / largestStat) ) + '%' }}>{num}</div>
             </div>
           ))}
           { (props.gameWon || props.gameLost) && 

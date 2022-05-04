@@ -1,7 +1,8 @@
 
-
 export const Notifications = (props) => {
-  return (
-    <div>{props.message}</div>
-  )
+    let message = props.notification ?? ""
+
+    return (
+      <div className={"alert " + ((message.length > 0) ? "show" : "")}>{message}</div>
+    )
 }

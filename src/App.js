@@ -12,6 +12,7 @@ import {
   calculateAllRevealedKeys,
   findUnused
 } from './lib/words'
+import { getStatuses } from './lib/statuses'
 import { Navbar } from './components/navbar/Navbar'
 import { Notifications } from './components/notifications/Notifications'
 import { GameBoard } from './components/gameboard/GameBoard'

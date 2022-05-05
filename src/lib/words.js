@@ -107,7 +107,7 @@ export const findUnused = (currentGuess, guesses, solution) => {
   }
 
   if(lettersLeft.length > 0) {
-    return "Guess must contain unused " + lettersLeft[0]
+    return "Guess must contain " + lettersLeft[0]
   }
   
   return false
